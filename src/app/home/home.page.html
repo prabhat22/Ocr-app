@@ -41,11 +41,11 @@
             Recognize Text
           </ion-button>
 
-    <ion-row  *ngIf="imageText">
-          <ion-button  (tap)="speak();">
-              <ion-icon md="ios-mic" style="margin-right:10px"></ion-icon> Speak
-            </ion-button>
-    </ion-row>
+          <ion-row  >
+            <ion-button  (click)="createFile();" *ngIf="imageText">
+                <ion-icon md="md-document" style="margin-right:10px"></ion-icon> Save As Pdf
+              </ion-button>
+        </ion-row>
 
     
   <img [src]="selectedImage" *ngIf="selectedImage">
@@ -58,9 +58,5 @@
     
   </ion-card>
   </ion-content>
-  <ion-row  >
-    <ion-button  (click)="createFile();">
-        <ion-icon md="ios-mic" style="margin-right:10px"></ion-icon> Save
-      </ion-button>
-</ion-row>
+ 
   

@@ -35,6 +35,7 @@ export class HomePage {
     private actionsh:ActionSheetController,
     private camera: Camera,
     private file: File,
+    public toastCtrl: ToastController
  
 ) 
     {
@@ -47,13 +48,15 @@ export class HomePage {
         count:0,
       })
     })
+  
 }
 refresh(){
   this.selectedImage = "";
   this.imageText = "";
 }
   async chooseImage(){
-
+    this.selectedImage = "";
+    this.imageText = "";
   const actionSheet = await this.actionsh.create({
     buttons: [
       {
@@ -132,20 +135,21 @@ async recog()
       worker.terminate();
     });
 }
-fakeValidateUserData() {
-  return of({
-    userDate1: 1,
-    userData2: 2
-  });
-}
-private setting = {
-  element: {
-    dynamicDownload: null as HTMLElement
-  }
-}
+// fakeValidateUserData() {
+//   return of({
+//     userDate1: 1,
+//     userData2: 2
+//   });
+// }
+// private setting = {
+//   element: {
+//     dynamicDownload: null as HTMLElement
+//   }
+// }
 createFile()
 {
   console.log("file create");
+  this.pdfMake();
   // console.log(this.file.dataDirectory)
   // this.file.createFile(this.file.dataDirectory, 'Demo', true);
   // this.imageText="I love delhi";
@@ -160,22 +164,74 @@ createFile()
   // });
   
 }
-private dyanmicDownloadByHtmlTag(arg: {
-  fileName: string,
-  text: string
-}) {
-  if (!this.setting.element.dynamicDownload) {
-    this.setting.element.dynamicDownload = document.createElement('a');
-  }
-  const element = this.setting.element.dynamicDownload;
-  const fileType = arg.fileName.indexOf('.json') > -1 ? 'text/json' : 'text/plain';
-  element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(arg.text)}`);
-  element.setAttribute('download', arg.fileName);
+// private dyanmicDownloadByHtmlTag(arg: {
+//   fileName: string,
+//   text: string
+// }) {
+//   if (!this.setting.element.dynamicDownload) {
+//     this.setting.element.dynamicDownload = document.createElement('a');
+//   }
+//   const element = this.setting.element.dynamicDownload;
+//   const fileType = arg.fileName.indexOf('.json') > -1 ? 'text/json' : 'text/plain';
+//   element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(arg.text)}`);
+//   element.setAttribute('download', arg.fileName);
 
-  var event = new MouseEvent("click");
-  element.dispatchEvent(event);
+//   var event = new MouseEvent("click");
+//   element.dispatchEvent(event);
+// }
+
+pdfMake()
+{
+  let self = this;
+  pdfmake.vfs = pdfFonts.pdfMake.vfs;
+  var docDefinition = {
+    content: [
+    {
+    columns: [
+   
+    [
+    { text: 'Text Result', style: 'header' },
+    { text: this.imageText, style: 'sub_header' },
+    ]
+    ]
+    }
+    ],
+    styles: {
+    header: {
+    bold: true,
+    fontSize: 20,
+    alignment: 'center'
+    },
+    sub_header: {
+    fontSize: 18,
+    alignment: 'center'
+    },
+    },
+    pageSize: 'A4',
+    pageOrientation: 'portrait'
+    };
+    console.log(docDefinition);
+    pdfmake.createPdf(docDefinition).getBuffer(function (buffer) {
+      let utf8 = new Uint8Array(buffer);
+      let binaryArray = utf8.buffer;
+      self.saveToDevice(binaryArray,"Ocr.pdf")
+      });
+    
 }
+async saveToDevice(data:any,savefile:any){
+  let self = this;
+  console.log("file save start");
+  self.file.writeFile(self.file.externalDataDirectory, savefile, data, {replace:true});
 
+const toast = await self.toastCtrl.create({
+message: 'File saved to your device',
+duration: 3000,
+position: 'bottom',
+color:'success'
+});
+toast.present();
+
+  }
 
 //   async recog(){
 //   let lc = await this.loading.create({
