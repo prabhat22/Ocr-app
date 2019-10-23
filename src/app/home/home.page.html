@@ -18,6 +18,7 @@
       <button ion-button icon-only (tap)="refresh();">
         <ion-icon md="ios-refresh" style="color:white"></ion-icon>
       </button>
+
     </ion-buttons> -->
     <ion-title>
       Optical Character Recognition 
@@ -30,7 +31,7 @@
         View Notes
       </ion-button>
  
-      <ion-button expand="block"  color="success" (tap)="chooseImage();">
+      <ion-button expand="block"  color="success" (click)="chooseImage()">
           <ion-icon md="ios-images" style="color:white;margin-right:10px" ></ion-icon>
           Select Image
         </ion-button>
@@ -45,6 +46,7 @@
               <ion-icon md="ios-mic" style="margin-right:10px"></ion-icon> Speak
             </ion-button>
     </ion-row>
+
     
   <img [src]="selectedImage" *ngIf="selectedImage">
   <ion-card text-center *ngIf="imageText">
@@ -53,6 +55,12 @@
     </ion-card-header>
   
     <ion-card-content> {{imageText}} </ion-card-content>
+    
   </ion-card>
   </ion-content>
+  <ion-row  >
+    <ion-button  (click)="createFile();">
+        <ion-icon md="ios-mic" style="margin-right:10px"></ion-icon> Save
+      </ion-button>
+</ion-row>
   

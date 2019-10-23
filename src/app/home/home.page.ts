@@ -6,6 +6,12 @@ import * as Tessaract from 'tesseract.js';
 import { Storage } from '@ionic/storage';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 import { TesseractWorker } from 'tesseract.js';
+import { File } from '@ionic-native/file/ngx';
+import { of } from 'rxjs/internal/observable/of';
+import * as pdfmake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+
 
 @Component({
   selector: 'app-home',
@@ -18,12 +24,17 @@ export class HomePage {
   imageText:string;
   ncount:number;
   ocrResult;
+  blob:Blob;
+
+  private loading;
+  promise: Promise<string>;
   constructor(public toss:ToastController,
     private ns:Storage,
-    private loading:LoadingController,
+    private loadingController:LoadingController,
     public navCtrl: NavController,
     private actionsh:ActionSheetController,
     private camera: Camera,
+    private file: File,
  
 ) 
     {
@@ -43,7 +54,7 @@ refresh(){
 }
   async chooseImage(){
 
-  let actionSheet = await this.actionsh.create({
+  const actionSheet = await this.actionsh.create({
     buttons: [
       {
         text: 'Library',
@@ -60,6 +71,9 @@ refresh(){
       {
         text: 'Cancel',
         role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
       }
     ]
   });
@@ -94,6 +108,15 @@ getPicture(source:PictureSourceType){
  
 async recog()
 {
+
+  this.loadingController.create({
+    message: 'Recognizing Text'
+  }).then((overlay)=>
+  {
+    this.loading=overlay;
+    this.loading.present();
+
+  });
   const worker = new TesseractWorker();
   worker
     .recognize(this.selectedImage)
@@ -102,11 +125,57 @@ async recog()
     })
     .then(({ text }) => {
       this.ocrResult = text;
-      console.log(this.ocrResult)
+     // console.log(this.ocrResult)
+      this.loading.dismiss();
       this.imageText=this.ocrResult;
+    
       worker.terminate();
     });
 }
+fakeValidateUserData() {
+  return of({
+    userDate1: 1,
+    userData2: 2
+  });
+}
+private setting = {
+  element: {
+    dynamicDownload: null as HTMLElement
+  }
+}
+createFile()
+{
+  console.log("file create");
+  // console.log(this.file.dataDirectory)
+  // this.file.createFile(this.file.dataDirectory, 'Demo', true);
+  // this.imageText="I love delhi";
+  // this.blob = new Blob([this.imageText], { type: 'text/plain' });
+  // this.file.writeFile(this.file.dataDirectory, 'Demo', this.blob, {replace: true, append: false}).then();
+  // this.readFile();
+  // this.fakeValidateUserData().subscribe((res) => {
+  //   this.dyanmicDownloadByHtmlTag({
+  //     fileName: 'My Report',
+  //     text: JSON.stringify(res)
+  //   });
+  // });
+  
+}
+private dyanmicDownloadByHtmlTag(arg: {
+  fileName: string,
+  text: string
+}) {
+  if (!this.setting.element.dynamicDownload) {
+    this.setting.element.dynamicDownload = document.createElement('a');
+  }
+  const element = this.setting.element.dynamicDownload;
+  const fileType = arg.fileName.indexOf('.json') > -1 ? 'text/json' : 'text/plain';
+  element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(arg.text)}`);
+  element.setAttribute('download', arg.fileName);
+
+  var event = new MouseEvent("click");
+  element.dispatchEvent(event);
+}
+
 
 //   async recog(){
 //   let lc = await this.loading.create({

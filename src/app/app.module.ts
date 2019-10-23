@@ -15,7 +15,7 @@ import { ErrorHandler } from '@angular/core';
 	
 import {MyHammerConfig} from './hammer.config'
 import { IonicStorageModule } from '@ionic/storage';
-
+import { File } from '@ionic-native/file/ngx';
 
 
 
@@ -32,6 +32,7 @@ import { IonicStorageModule } from '@ionic/storage';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     Camera,
+    File
 
   ],
   bootstrap: [AppComponent]
