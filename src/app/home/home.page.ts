@@ -10,6 +10,13 @@ import { File } from '@ionic-native/file/ngx';
 import { of } from 'rxjs/internal/observable/of';
 import * as pdfmake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+// import * as fs from "fs";
+import { Document, Paragraph, Packer, TextRun } from "docx";
+import * as saveAs from 'file-saver';
+import { HTTP } from '@ionic-native/http/ngx';
+import { HttpClient } from '@angular/common/http';
+
+
 
 
 
@@ -28,6 +35,7 @@ export class HomePage {
 
   private loading;
   promise: Promise<string>;
+  films: any;
   constructor(public toss:ToastController,
     private ns:Storage,
     private loadingController:LoadingController,
@@ -35,7 +43,9 @@ export class HomePage {
     private actionsh:ActionSheetController,
     private camera: Camera,
     private file: File,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    private http:HttpClient
+    
  
 ) 
     {
@@ -48,8 +58,21 @@ export class HomePage {
         count:0,
       })
     })
+    var obj={"text":"Helo world"};
   
-}
+  //   this.films = this.http.get('https://swapi.co/api/films');
+  //   this.films
+  //   .subscribe(data => {
+  //     console.log('my data: ', data);
+  //   })
+  
+//     this.http.post('http://192.168.1.4:5000',obj,{})
+//   .subscribe(data => {
+// console.log(data);
+
+//   })
+
+    }
 refresh(){
   this.selectedImage = "";
   this.imageText = "";
@@ -135,50 +158,39 @@ async recog()
       worker.terminate();
     });
 }
-// fakeValidateUserData() {
-//   return of({
-//     userDate1: 1,
-//     userData2: 2
-//   });
-// }
-// private setting = {
-//   element: {
-//     dynamicDownload: null as HTMLElement
-//   }
-// }
+
+private setting = {
+  element: {
+    dynamicDownload: null as HTMLElement
+  }
+}
+saveDoc()
+{console.log("fil docs")
+  this.dyanmicDownloadByHtmlTag({
+    fileName: 'My Report',
+    text: "hello world"
+  });
+}
 createFile()
 {
   console.log("file create");
-  this.pdfMake();
-  // console.log(this.file.dataDirectory)
-  // this.file.createFile(this.file.dataDirectory, 'Demo', true);
-  // this.imageText="I love delhi";
-  // this.blob = new Blob([this.imageText], { type: 'text/plain' });
-  // this.file.writeFile(this.file.dataDirectory, 'Demo', this.blob, {replace: true, append: false}).then();
-  // this.readFile();
-  // this.fakeValidateUserData().subscribe((res) => {
-  //   this.dyanmicDownloadByHtmlTag({
-  //     fileName: 'My Report',
-  //     text: JSON.stringify(res)
-  //   });
-  // });
-  
+  this.pdfMake(); 
 }
-// private dyanmicDownloadByHtmlTag(arg: {
-//   fileName: string,
-//   text: string
-// }) {
-//   if (!this.setting.element.dynamicDownload) {
-//     this.setting.element.dynamicDownload = document.createElement('a');
-//   }
-//   const element = this.setting.element.dynamicDownload;
-//   const fileType = arg.fileName.indexOf('.json') > -1 ? 'text/json' : 'text/plain';
-//   element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(arg.text)}`);
-//   element.setAttribute('download', arg.fileName);
+private dyanmicDownloadByHtmlTag(arg: {
+  fileName: string,
+  text: string
+}) {
+  if (!this.setting.element.dynamicDownload) {
+    this.setting.element.dynamicDownload = document.createElement('a');
+  }
+  const element = this.setting.element.dynamicDownload;
+  const fileType = arg.fileName.indexOf('.json') > -1 ? 'text/json' : 'text/plain';
+  element.setAttribute('href', `data:${fileType};charset=utf-8,${encodeURIComponent(arg.text)}`);
+  element.setAttribute('download', arg.fileName);
 
-//   var event = new MouseEvent("click");
-//   element.dispatchEvent(event);
-// }
+  var event = new MouseEvent("click");
+  element.dispatchEvent(event);
+}
 
 pdfMake()
 {
@@ -260,5 +272,19 @@ toast.present();
 //   })
 // }
 
+// saveDoc()
+// {
+//   console.log("save doc call")
+//   const doc = new Document();
 
+//   const paragraph = new Paragraph("Hello World");
+
+//   // const packer = new Packer();
+
+//   Packer.toBlob(doc).then(blob => {
+//       console.log(blob);
+//       saveAs(blob, "ocr.docx");
+//       console.log("Document created successfully");
+//   });
+// }
     }
