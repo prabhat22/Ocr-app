@@ -15,7 +15,8 @@ import { ErrorHandler } from '@angular/core';
 	
 import {MyHammerConfig} from './hammer.config'
 import { IonicStorageModule } from '@ionic/storage';
-
+import { File } from '@ionic-native/file/ngx';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -25,13 +26,14 @@ import { IonicStorageModule } from '@ionic/storage';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,IonicStorageModule.forRoot()],
+  imports: [BrowserModule, HttpClientModule,IonicModule.forRoot(), AppRoutingModule,IonicStorageModule.forRoot()],
   providers: [
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     Camera,
+    File
 
   ],
   bootstrap: [AppComponent]

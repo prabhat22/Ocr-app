@@ -1,36 +1,17 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
-</ion-content> -->
 <ion-header>
   <ion-toolbar text-center color="dark">
-    <!-- <ion-buttons end>
-      <button ion-button icon-only (tap)="refresh();">
-        <ion-icon md="ios-refresh" style="color:white"></ion-icon>
-      </button>
-    </ion-buttons> -->
     <ion-title>
       Optical Character Recognition 
     </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-button expand="block"  color="primary" (tap)="viewNotes();">
+    <ion-button expand="block"  color="primary">
         <ion-icon md="ios-paper" style="color:white;margin-right:10px" ></ion-icon>
         View Notes
       </ion-button>
  
-      <ion-button expand="block"  color="success" (tap)="chooseImage();">
+      <ion-button expand="block"  color="success" (click)="chooseImage()">
           <ion-icon md="ios-images" style="color:white;margin-right:10px" ></ion-icon>
           Select Image
         </ion-button>
@@ -40,11 +21,17 @@
             Recognize Text
           </ion-button>
 
-    <ion-row  *ngIf="imageText">
-          <ion-button  (tap)="speak();">
-              <ion-icon md="ios-mic" style="margin-right:10px"></ion-icon> Speak
-            </ion-button>
-    </ion-row>
+          <ion-row  >
+            <ion-button  (click)="createFile();" *ngIf="imageText">
+                <ion-icon md="md-document" style="margin-right:10px"></ion-icon> Save As Pdf
+              </ion-button>
+        </ion-row>
+         <ion-row >
+            <ion-button  (click)="saveDoc();" *ngIf="imageText">
+                <ion-icon md="md-document" style="margin-right:10px"></ion-icon> Save As Doc
+              </ion-button>
+        </ion-row>
+
     
   <img [src]="selectedImage" *ngIf="selectedImage">
   <ion-card text-center *ngIf="imageText">
@@ -53,6 +40,8 @@
     </ion-card-header>
   
     <ion-card-content> {{imageText}} </ion-card-content>
+    
   </ion-card>
   </ion-content>
+ 
   
