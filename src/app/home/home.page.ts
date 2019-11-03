@@ -42,6 +42,7 @@ refresh(){
   this.imageText = "";
 }
   async chooseImage(){
+    console.log("image choose");
 
   let actionSheet = await this.actionsh.create({
     buttons: [
@@ -94,6 +95,7 @@ getPicture(source:PictureSourceType){
  
 async recog()
 {
+  console.log("recognize");
   const worker = new TesseractWorker();
   worker
     .recognize(this.selectedImage)
