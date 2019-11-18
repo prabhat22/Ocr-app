@@ -16,6 +16,7 @@ import { ErrorHandler } from '@angular/core';
 import {MyHammerConfig} from './hammer.config'
 import { IonicStorageModule } from '@ionic/storage';
 import { File } from '@ionic-native/file/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -33,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     Camera,
-    File
+    File,
+    SocialSharing
 
   ],
   bootstrap: [AppComponent]

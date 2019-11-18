@@ -31,6 +31,11 @@
                 <ion-icon md="md-document" style="margin-right:10px"></ion-icon> Save As Doc
               </ion-button>
         </ion-row>
+        <ion-row >
+          <ion-button  (click)="shareViaWhatsApp();" *ngIf="imageText">
+              <ion-icon md="md-document" style="margin-right:10px"></ion-icon> share Via WhatsApp
+            </ion-button>
+      </ion-row>
 
     
   <img [src]="selectedImage" *ngIf="selectedImage">

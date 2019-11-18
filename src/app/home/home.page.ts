@@ -7,12 +7,14 @@ import { Storage} from '@ionic/storage';
 import {Camera, CameraOptions, PictureSourceType} from '@ionic-native/camera/ngx';
 import {TesseractWorker} from 'tesseract.js';
 import {File} from '@ionic-native/file/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import {of} from 'rxjs/internal/observable/of';
 import * as pdfmake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 // import * as fs from "fs";
 import {HTTP} from '@ionic-native/http/ngx';
 import {HttpClient} from '@angular/common/http';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +30,8 @@ export class HomePage {
               private camera: Camera,
               private file: File,
               public toastCtrl: ToastController,
-              private http: HttpClient
+              private http: HttpClient,
+              private socialSharing: SocialSharing
   ) {
 
     this.ns.get('notecount').then(result => {
@@ -50,6 +53,7 @@ export class HomePage {
   ncount: number;
   ocrResult;
   blob: Blob;
+  text: string = 'hello';
 
   private loading;
   promise: Promise < string > ;
@@ -154,6 +158,21 @@ export class HomePage {
       color: 'success'
     });
     toast.present();
+  }
+
+  // async resolveLocalFile() {
+  //   return this.file.copyFile(`${this.file.applicationDirectory}www/assets/imgs`, 'acedemy.jpg', this.file.cacheDirectory, `${new Date().getTime()}.jpg`)
+  // }
+
+  //shareViaWhatsApp
+  shareViaWhatsApp() {
+    this.socialSharing.shareViaWhatsApp(this.text).then(() => {
+      // Success!
+      console.log('shared');
+    }).catch(() => {
+      // Error!
+      console.log('err');
+    });
   }
 
   // DOC Creation
